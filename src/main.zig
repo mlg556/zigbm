@@ -65,14 +65,14 @@ const Bm = struct {
 
 var machine = Bm{};
 
+const program = [_]Inst{ .{ .type = Inst_Type.PUSH, .operand = 3 }, .{ .type = Inst_Type.PLUS, .operand = 0 } };
+
 pub fn main() !void {
     const stdout = std.io.getStdOut();
     const writer = stdout.writer();
 
-    try machine.execute(.{ .type = Inst_Type.PUSH, .operand = -4 });
-    try machine.execute(.{ .type = Inst_Type.PUSH, .operand = 3 });
-
-    try machine.execute(.{ .type = Inst_Type.PLUS, .operand = 0 });
-
-    try machine.bm_stack.show(writer);
+    for (program) |line| {
+        const ret = machine.execute(line);
+        try writer.print("{!}\n", .{ret});
+    }
 }
